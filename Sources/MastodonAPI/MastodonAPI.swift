@@ -19,7 +19,8 @@ public struct MastodonAPI {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         guard let url = urlComponents.url(relativeTo: serverURL) else {
-            fatalError()
+            let error = MastodonAPIError.badRequest(request)
+            throw error
         }
         
         var httpRequest = HTTPRequest(method: request.method, url: url, headerFields: request.headerFields)
@@ -40,7 +41,8 @@ public struct MastodonAPI {
             let response = try JSONDecoder().decode(Response.self, from: data)
             return response
         default:
-            fatalError()
+            let error = MastodonAPIError.unsuccessfulHTTPResponse(httpResponse)
+            throw error
         }
     }
 }
