@@ -40,8 +40,11 @@ public struct MastodonAPI {
         case .successful:
             let response = try JSONDecoder().decode(Response.self, from: data)
             return response
+        case .clientError:
+            let error = try JSONDecoder().decode(Entities.Error.self, from: data)
+            throw error
         default:
-            let error = MastodonAPIError.unsuccessfulHTTPResponse(httpResponse)
+            let error = MastodonAPIError.unknown(httpResponse.status.code, String(decoding: data, as: UTF8.self))
             throw error
         }
     }
