@@ -15,7 +15,7 @@ public struct MastodonAPI {
         self.session = session
     }
     
-    public func response<Response>(for request: Request<Response>) async throws -> Response {
+    public func response<Response: Decodable>(_: Response.Type, for request: Request) async throws -> Response {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         guard let url = urlComponents.url(relativeTo: serverURL) else {

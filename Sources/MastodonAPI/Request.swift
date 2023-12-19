@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-public struct Request<Response: Decodable>: Sendable {
+public struct Request: Sendable {
     public var method: HTTPRequest.Method
     
     public var path: String
