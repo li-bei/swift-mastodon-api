@@ -1,3 +1,5 @@
+import Foundation
+
 extension Entities {
     public struct Account: Codable, Sendable {
         public let acct: String
@@ -5,6 +7,7 @@ extension Entities {
         public let followerCount: Int
         public let followingCount: Int
         public let id: String
+        public let staticAvatarURL: URL
         public let username: String
         
         private enum CodingKeys: String, CodingKey {
@@ -13,6 +16,7 @@ extension Entities {
             case followerCount = "followers_count"
             case followingCount = "following_count"
             case id
+            case staticAvatarURL = "avatar_static"
             case username
         }
     }
