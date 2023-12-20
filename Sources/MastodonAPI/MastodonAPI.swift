@@ -16,6 +16,13 @@ public struct MastodonAPI {
     }
     
     public func response<Response: Decodable>(_: Response.Type, for request: Request) async throws -> Response {
+        return try await paginatedResponse(Response.self, for: request).0
+    }
+    
+    public func paginatedResponse<Response: Decodable>(
+        _: Response.Type,
+        for request: Request
+    ) async throws -> (Response, String?) {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         if let queryItems = request.queryItems?.filter({ $0.value != nil }), queryItems.isEmpty == false {
@@ -42,7 +49,8 @@ public struct MastodonAPI {
         switch httpResponse.status.kind {
         case .successful:
             let response = try JSONDecoder().decode(Response.self, from: data)
-            return response
+            let paginationID = paginationID(from: httpResponse)
+            return (response, paginationID)
         case .clientError:
             let error = try JSONDecoder().decode(Entities.Error.self, from: data)
             throw error
@@ -50,5 +58,18 @@ public struct MastodonAPI {
             let error = MastodonAPIError.unknown(httpResponse.status.code, String(decoding: data, as: UTF8.self))
             throw error
         }
+    }
+    
+    private func paginationID(from httpResponse: HTTPResponse) -> String? {
+        guard let links = httpResponse.headerFields[HTTPField.Name("Link")!] else { return nil }
+        for link in links.components(separatedBy: ", ") {
+            let components = link.components(separatedBy: "; ")
+            if components.count == 2,
+               components[1] == #"rel="next""#,
+               let urlComponents = URLComponents(string: String(components[0].dropFirst().dropLast())) {
+                return urlComponents.queryItems?.first(where: { $0.name == "max_id" || $0.name == "offset" })?.value
+            }
+        }
+        return nil
     }
 }
