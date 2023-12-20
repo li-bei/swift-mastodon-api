@@ -21,6 +21,7 @@ public struct Request: Sendable {
     ) {
         self.method = method
         self.path = path
+        self.queryItems = queryItems
         self.headerFields = headerFields
         self.body = body
     }
