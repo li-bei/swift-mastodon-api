@@ -18,6 +18,9 @@ public struct MastodonAPI {
     public func response<Response: Decodable>(_: Response.Type, for request: Request) async throws -> Response {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
+        if let queryItems = request.queryItems?.filter({ $0.value != nil }), queryItems.isEmpty == false {
+            urlComponents.queryItems = queryItems
+        }
         guard let url = urlComponents.url(relativeTo: serverURL) else {
             let error = MastodonAPIError.badRequest(request)
             throw error
