@@ -11,6 +11,7 @@ extension Entities {
         public let isReblogged: Bool
         public let reblog: Status?
         public let reblogCount: Int
+        public let replyCount: Int
         public let url: URL?
         
         private enum CodingKeys: String, CodingKey {
@@ -23,6 +24,7 @@ extension Entities {
             case isReblogged = "reblogged"
             case reblog
             case reblogCount = "reblogs_count"
+            case replyCount = "replies_count"
             case url
         }
     }
