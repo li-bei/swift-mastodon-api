@@ -4,6 +4,7 @@ extension Entities {
     public final class Status: Codable, Sendable {
         public let account: Account
         public let content: String
+        public let creationDate: Date
         public let favoriteCount: Int
         public let id: String
         public let isBookmarked: Bool
@@ -17,6 +18,7 @@ extension Entities {
         private enum CodingKeys: String, CodingKey {
             case account
             case content
+            case creationDate = "created_at"
             case favoriteCount = "favourites_count"
             case id
             case isBookmarked = "bookmarked"
