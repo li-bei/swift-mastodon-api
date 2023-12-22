@@ -3,6 +3,7 @@ import Foundation
 extension Entities {
     public final class Status: Codable, Sendable {
         public let account: Account
+        public let content: String
         public let id: String
         public let isBookmarked: Bool
         public let isFavorited: Bool
@@ -12,6 +13,7 @@ extension Entities {
         
         private enum CodingKeys: String, CodingKey {
             case account
+            case content
             case id
             case isBookmarked = "bookmarked"
             case isFavorited = "favourited"
