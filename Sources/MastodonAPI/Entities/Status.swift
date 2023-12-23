@@ -16,6 +16,7 @@ extension Entities {
         public let reblogCount: Int
         public let replyCount: Int
         public let url: URL?
+        public let visibility: String
         
         private enum CodingKeys: String, CodingKey {
             case account
@@ -32,6 +33,7 @@ extension Entities {
             case reblogCount = "reblogs_count"
             case replyCount = "replies_count"
             case url
+            case visibility
         }
     }
 }
