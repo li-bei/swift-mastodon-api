@@ -8,6 +8,7 @@ extension Entities {
         public let followingCount: Int
         public let id: String
         public let staticAvatarURL: URL
+        public let staticHeaderURL: URL
         public let username: String
         
         private enum CodingKeys: String, CodingKey {
@@ -17,6 +18,7 @@ extension Entities {
             case followingCount = "following_count"
             case id
             case staticAvatarURL = "avatar_static"
+            case staticHeaderURL = "header_static"
             case username
         }
     }
