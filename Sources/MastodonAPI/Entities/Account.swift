@@ -4,6 +4,7 @@ extension Entities {
     public struct Account: Codable, Sendable {
         public let acct: String
         public let displayName: String
+        public let emojis: [CustomEmoji]
         public let followerCount: Int
         public let followingCount: Int
         public let id: String
@@ -14,6 +15,7 @@ extension Entities {
         private enum CodingKeys: String, CodingKey {
             case acct
             case displayName = "display_name"
+            case emojis
             case followerCount = "followers_count"
             case followingCount = "following_count"
             case id
