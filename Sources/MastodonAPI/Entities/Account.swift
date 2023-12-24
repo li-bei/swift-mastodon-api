@@ -8,6 +8,7 @@ extension Entities {
         public let followerCount: Int
         public let followingCount: Int
         public let id: String
+        public let note: String
         public let staticAvatarURL: URL
         public let staticHeaderURL: URL
         public let username: String
@@ -19,6 +20,7 @@ extension Entities {
             case followerCount = "followers_count"
             case followingCount = "following_count"
             case id
+            case note
             case staticAvatarURL = "avatar_static"
             case staticHeaderURL = "header_static"
             case username
