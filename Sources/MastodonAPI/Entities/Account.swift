@@ -4,6 +4,7 @@ extension Entities {
     public struct Account: Codable, Sendable {
         public let acct: String
         public let avatarURL: URL
+        public let creationDate: Date
         public let displayName: String
         public let emojis: [CustomEmoji]
         public let fields: [Field]
@@ -20,6 +21,7 @@ extension Entities {
         private enum CodingKeys: String, CodingKey {
             case acct
             case avatarURL = "avatar"
+            case creationDate = "created_at"
             case displayName = "display_name"
             case emojis
             case fields
