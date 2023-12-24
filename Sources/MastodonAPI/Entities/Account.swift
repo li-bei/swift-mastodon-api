@@ -13,6 +13,7 @@ extension Entities {
         public let note: String
         public let staticAvatarURL: URL
         public let staticHeaderURL: URL
+        public let url: URL
         public let username: String
         
         private enum CodingKeys: String, CodingKey {
@@ -27,6 +28,7 @@ extension Entities {
             case note
             case staticAvatarURL = "avatar_static"
             case staticHeaderURL = "header_static"
+            case url
             case username
         }
     }
