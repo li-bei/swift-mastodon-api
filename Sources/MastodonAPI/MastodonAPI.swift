@@ -29,7 +29,7 @@ public struct MastodonAPI {
             urlComponents.queryItems = queryItems
         }
         guard let url = urlComponents.url(relativeTo: serverURL) else {
-            let error = MastodonAPIError.badRequest(request)
+            let error = MastodonAPIError(request: request)
             throw error
         }
         
@@ -55,7 +55,11 @@ public struct MastodonAPI {
             let error = try JSONDecoder().decode(Entities.Error.self, from: data)
             throw error
         default:
-            let error = MastodonAPIError.unknown(httpResponse.status.code, String(decoding: data, as: UTF8.self))
+            let error = MastodonAPIError(
+                request: request,
+                httpStatusCode: httpResponse.status.code,
+                httpResponseBody: String(decoding: data, as: UTF8.self)
+            )
             throw error
         }
     }
