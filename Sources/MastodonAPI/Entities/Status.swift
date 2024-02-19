@@ -3,6 +3,7 @@ import Foundation
 extension Entities {
     public final class Status: Codable, Sendable {
         public let account: Account
+        public let application: Application?
         public let content: String
         public let creationDate: Date
         public let emojis: [CustomEmoji]
@@ -22,6 +23,7 @@ extension Entities {
         
         private enum CodingKeys: String, CodingKey {
             case account
+            case application
             case content
             case creationDate = "created_at"
             case emojis
