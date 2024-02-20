@@ -4,7 +4,7 @@ extension Entities {
     public struct MediaAttachment: Codable, Sendable {
         public let description: String?
         public let id: String
-        public let previewURL: URL
+        public let previewURL: URL?
         public let type: String
         public let url: URL
         
