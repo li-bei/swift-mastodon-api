@@ -18,6 +18,7 @@ extension Entities {
         public let reblog: Status?
         public let reblogCount: Int
         public let replyCount: Int
+        public let tags: [Tag]
         public let url: URL?
         public let visibility: String
         
@@ -38,6 +39,7 @@ extension Entities {
             case reblog
             case reblogCount = "reblogs_count"
             case replyCount = "replies_count"
+            case tags
             case url
             case visibility
         }
