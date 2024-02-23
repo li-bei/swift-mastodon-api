@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-public struct MastodonAPI {
+public struct MastodonAPI: Sendable {
     private let serverURL: URL
     
     private let accessToken: String?
