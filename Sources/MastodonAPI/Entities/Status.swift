@@ -15,6 +15,7 @@ extension Entities {
         public let isFavorited: Bool
         public let isReblogged: Bool
         public let mediaAttachments: [MediaAttachment]
+        public let mentions: [Mention]
         public let reblog: Status?
         public let reblogCount: Int
         public let replyCount: Int
@@ -36,6 +37,7 @@ extension Entities {
             case isFavorited = "favourited"
             case isReblogged = "reblogged"
             case mediaAttachments = "media_attachments"
+            case mentions
             case reblog
             case reblogCount = "reblogs_count"
             case replyCount = "replies_count"
