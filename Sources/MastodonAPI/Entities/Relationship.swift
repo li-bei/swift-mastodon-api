@@ -11,7 +11,7 @@ extension Entities {
         public let isMutingNotifications: Bool
         public let isNotifying: Bool
         public let isRequested: Bool
-        public let isRequestedBy: Bool
+        public let isRequestedBy: Bool?
         public let isShowingReblogs: Bool
         public let languages: String?
         public let note: String
