@@ -4,6 +4,7 @@ extension Entities {
     public struct MediaAttachment: Codable, Sendable {
         public let description: String?
         public let id: String
+        public let meta: Meta
         public let previewURL: URL?
         public let type: String
         public let url: URL
@@ -11,6 +12,7 @@ extension Entities {
         private enum CodingKeys: String, CodingKey {
             case description
             case id
+            case meta
             case previewURL = "preview_url"
             case type
             case url
