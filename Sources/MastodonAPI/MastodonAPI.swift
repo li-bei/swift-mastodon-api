@@ -12,7 +12,10 @@ public struct MastodonAPI: Sendable {
         self.session = session
     }
 
-    public func response<Response: Decodable>(for request: Request) async throws -> Response {
+    public func response<Response: Decodable>(
+        _ responseType: Response.Type,
+        for request: Request
+    ) async throws -> Response {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         guard let url = urlComponents.url(relativeTo: serverURL) else {
@@ -27,7 +30,7 @@ public struct MastodonAPI: Sendable {
         }
         switch httpResponse.status.kind {
         case .successful:
-            return try JSONDecoder().decode(Response.self, from: data)
+            return try JSONDecoder().decode(responseType, from: data)
         default:
             if let error = try? JSONDecoder().decode(Entities.Error.self, from: data) {
                 throw error
