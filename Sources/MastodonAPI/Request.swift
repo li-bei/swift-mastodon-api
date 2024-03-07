@@ -8,14 +8,15 @@ public struct Request: Sendable {
 
     public var headerFields: HTTPFields = [:]
 
-    public var body: Data?
+    public var bodyData: Data?
 }
 
 // MARK: -
 
 extension Request {
     public static func post(_ endpoint: String, parameters: Encodable) throws -> Request {
-        let body = try JSONEncoder().encode(parameters)
-        return Request(method: .post, path: endpoint, headerFields: [.contentType: "application/json"], body: body)
+        let headerFields: HTTPFields = [.contentType: "application/json"]
+        let bodyData = try JSONEncoder().encode(parameters)
+        return Request(method: .post, path: endpoint, headerFields: headerFields, bodyData: bodyData)
     }
 }

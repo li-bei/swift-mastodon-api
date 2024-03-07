@@ -20,8 +20,8 @@ public struct MastodonAPI: Sendable {
         }
 
         let httpRequest = HTTPRequest(method: request.method, url: url, headerFields: request.headerFields)
-        let (data, httpResponse) = if let body = request.body {
-            try await session.upload(for: httpRequest, from: body)
+        let (data, httpResponse) = if let bodyData = request.bodyData {
+            try await session.upload(for: httpRequest, from: bodyData)
         } else {
             try await session.data(for: httpRequest)
         }
