@@ -6,6 +6,8 @@ public struct Request: Sendable {
 
     public var path: String
 
+    public var queryItems: [URLQueryItem]?
+
     public var headerFields: HTTPFields = [:]
 
     public var bodyData: Data?
@@ -16,6 +18,11 @@ public struct Request: Sendable {
 extension Request {
     public static func get(_ endpoint: String) -> Request {
         return Request(method: .get, path: endpoint)
+    }
+
+    public static func get(_ endpoint: String, parameters: [String: String?]) -> Request {
+        let queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        return Request(method: .get, path: endpoint, queryItems: queryItems)
     }
 
     public static func post(_ endpoint: String) -> Request {
