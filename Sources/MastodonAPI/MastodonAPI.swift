@@ -19,8 +19,18 @@ public struct MastodonAPI: Sendable {
         _ responseType: Response.Type,
         for request: Request
     ) async throws -> Response {
+        return try await paginatedResponse(responseType, for: request).0
+    }
+
+    public func paginatedResponse<Response: Decodable>(
+        _ responseType: Response.Type,
+        for request: Request
+    ) async throws -> (Response, String?) {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
+        if let queryItems = request.queryItems?.filter({ $0.value != nil }), queryItems.isEmpty == false {
+            urlComponents.queryItems = queryItems
+        }
         guard let url = urlComponents.url(relativeTo: serverURL) else {
             throw MastodonAPIError(request: request, data: nil, httpResponse: nil)
         }
@@ -38,7 +48,9 @@ public struct MastodonAPI: Sendable {
 
         switch httpResponse.status.kind {
         case .successful:
-            return try JSONDecoder().decode(responseType, from: data)
+            let response = try JSONDecoder().decode(responseType, from: data)
+            let maxID = maxID(from: httpResponse)
+            return (response, maxID)
         default:
             if let error = try? JSONDecoder().decode(Entities.Error.self, from: data) {
                 throw error
@@ -46,5 +58,19 @@ public struct MastodonAPI: Sendable {
                 throw MastodonAPIError(request: request, data: data, httpResponse: httpResponse)
             }
         }
+    }
+
+    private func maxID(from httpResponse: HTTPResponse) -> String? {
+        guard let links = httpResponse.headerFields[HTTPField.Name("Link")!] else { return nil }
+        for link in links.components(separatedBy: ", ") {
+            let components = link.components(separatedBy: "; ")
+            if components.count == 2,
+               components[1] == #"rel="next""#,
+               let urlComponents = URLComponents(string: String(components[0].dropFirst().dropLast())),
+               let maxID = urlComponents.queryItems?.first(where: { $0.name == "max_id" })?.value {
+                return maxID
+            }
+        }
+        return nil
     }
 }
