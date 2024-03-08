@@ -14,6 +14,10 @@ public struct Request: Sendable {
 // MARK: -
 
 extension Request {
+    public static func get(_ endpoint: String) -> Request {
+        return Request(method: .get, path: endpoint)
+    }
+
     public static func post(_ endpoint: String) -> Request {
         return Request(method: .post, path: endpoint)
     }
