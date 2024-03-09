@@ -48,7 +48,7 @@ public struct MastodonAPI: Sendable {
 
         switch httpResponse.status.kind {
         case .successful:
-            let response = try JSONDecoder().decode(responseType, from: data)
+            let response = try makeJSONDecoder().decode(responseType, from: data)
             let maxID = maxID(from: httpResponse)
             return (response, maxID)
         default:
@@ -58,6 +58,29 @@ public struct MastodonAPI: Sendable {
                 throw MastodonAPIError(request: request, data: data, httpResponse: httpResponse)
             }
         }
+    }
+
+    private static let iso8601DateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+
+    private func makeJSONDecoder() -> JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let string = try container.decode(String.self)
+            if let date = Self.iso8601DateFormatter.date(from: string) {
+                return date
+            } else {
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "Expected date string to be ISO8601-formatted."
+                )
+            }
+        }
+        return decoder
     }
 
     private func maxID(from httpResponse: HTTPResponse) -> String? {
