@@ -48,7 +48,7 @@ public struct MastodonAPI: Sendable {
 
         switch httpResponse.status.kind {
         case .successful:
-            let response = try JSONDecoder().decode(Response.self, from: data)
+            let response = try makeJSONDecoder().decode(Response.self, from: data)
             let paginationID = paginationID(from: httpResponse)
             return (response, paginationID)
         default:
@@ -58,6 +58,30 @@ public struct MastodonAPI: Sendable {
                 throw MastodonAPIError(request: request)
             }
         }
+    }
+
+    private static let iso8601DateFormatter: ISO8601DateFormatter = {
+        let iso8601DateFormatter = ISO8601DateFormatter()
+        iso8601DateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return iso8601DateFormatter
+    }()
+
+    private func makeJSONDecoder() -> JSONDecoder {
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let string = try container.decode(String.self)
+            if let date = Self.iso8601DateFormatter.date(from: string) {
+                return date
+            } else {
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "Expected date string to be ISO8601-formatted."
+                )
+            }
+
+        }
+        return jsonDecoder
     }
 
     private func paginationID(from httpResponse: HTTPResponse) -> String? {
