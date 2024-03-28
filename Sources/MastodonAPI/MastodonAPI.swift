@@ -15,7 +15,17 @@ public struct MastodonAPI: Sendable {
         self.session = session
     }
 
-    public func response<Response: Decodable>(_: Response.Type, for request: Request) async throws -> Response {
+    public func response<Response: Decodable>(
+        _ responseType: Response.Type,
+        for request: Request
+    ) async throws -> Response {
+        return try await paginatedResponse(responseType, for: request).0
+    }
+
+    public func paginatedResponse<Response: Decodable>(
+        _ responseType: Response.Type,
+        for request: Request
+    ) async throws -> (Response, String? ) {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         if let queryItems = request.queryItems?.filter({ $0.value != nil }), queryItems.isEmpty == false {
@@ -39,7 +49,8 @@ public struct MastodonAPI: Sendable {
         switch httpResponse.status.kind {
         case .successful:
             let response = try JSONDecoder().decode(Response.self, from: data)
-            return response
+            let paginationID = paginationID(from: httpResponse)
+            return (response, paginationID)
         default:
             if let error = try? JSONDecoder().decode(Entities.Error.self, from: data) {
                 throw error
@@ -47,5 +58,19 @@ public struct MastodonAPI: Sendable {
                 throw MastodonAPIError(request: request)
             }
         }
+    }
+
+    private func paginationID(from httpResponse: HTTPResponse) -> String? {
+        guard let links = httpResponse.headerFields[HTTPField.Name("Link")!] else { return nil }
+        for link in links.components(separatedBy: ", ") {
+            let components = link.components(separatedBy: "; ")
+            if components.count == 2, components[1] == #"rel="next""#,
+               let urlComponents = URLComponents(string: String(components[0].dropFirst().dropLast())),
+               let queryItems = urlComponents.queryItems,
+               let paginationID = queryItems.first(where: { $0.name == "max_id" })?.value {
+                return paginationID
+            }
+        }
+        return nil
     }
 }
