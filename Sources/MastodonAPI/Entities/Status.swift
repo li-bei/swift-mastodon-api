@@ -8,6 +8,7 @@ extension Entities {
         public let id: String
         public let reblog: Status?
         public let url: URL?
+        public let visibility: String
 
         private enum CodingKeys: String, CodingKey {
             case account
@@ -16,6 +17,7 @@ extension Entities {
             case id
             case reblog
             case url
+            case visibility
         }
     }
 }
