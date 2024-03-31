@@ -8,6 +8,7 @@ extension Entities {
         public let id: String
         public let inReplyToAccountID: String?
         public let inReplyToID: String?
+        public let isBookmarked: Bool
         public let isFavorited: Bool
         public let isReblogged: Bool
         public let reblog: Status?
@@ -21,6 +22,7 @@ extension Entities {
             case id
             case inReplyToAccountID = "in_reply_to_account_id"
             case inReplyToID = "in_reply_to_id"
+            case isBookmarked = "bookmarked"
             case isFavorited = "favourited"
             case isReblogged = "reblogged"
             case reblog
