@@ -21,6 +21,10 @@ extension Request {
         return Request(method: .get, path: endpoint, queryItems: queryItems)
     }
 
+    public static func post(_ endpoint: String) -> Request {
+        return Request(method: .post, path: endpoint)
+    }
+
     public static func post(_ endpoint: String, parameters: Encodable) throws -> Request {
         let body = try JSONEncoder().encode(parameters)
         return Request(method: .post, path: endpoint, headerFields: [.contentType: "application/json"], body: body)
