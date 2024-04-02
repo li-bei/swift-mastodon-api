@@ -10,6 +10,7 @@ extension Entities {
         public let headerURL: URL
         public let id: String
         public let isLocked: Bool
+        public let note: String
         public let staticAvatarURL: URL
         public let staticHeaderURL: URL
         public let statusCount: Int
@@ -25,6 +26,7 @@ extension Entities {
             case headerURL = "header"
             case id
             case isLocked = "locked"
+            case note
             case staticAvatarURL = "avatar_static"
             case staticHeaderURL = "header_static"
             case statusCount = "statuses_count"
