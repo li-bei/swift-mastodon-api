@@ -6,6 +6,7 @@ extension Entities {
         public let displayName: String
         public let id: String
         public let staticAvatarURL: URL
+        public let staticHeaderURL: URL
         public let url: URL
         public let username: String
 
@@ -14,6 +15,7 @@ extension Entities {
             case displayName = "display_name"
             case id
             case staticAvatarURL = "avatar_static"
+            case staticHeaderURL = "header_static"
             case url
             case username
         }
