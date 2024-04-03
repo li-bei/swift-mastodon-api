@@ -5,6 +5,7 @@ extension Entities {
         public let acct: String
         public let avatarURL: URL
         public let displayName: String
+        public let fields: [Field]
         public let followerCount: Int
         public let followingCount: Int
         public let headerURL: URL
@@ -21,6 +22,7 @@ extension Entities {
             case acct
             case avatarURL = "avatar"
             case displayName = "display_name"
+            case fields
             case followerCount = "followers_count"
             case followingCount = "following_count"
             case headerURL = "header"
