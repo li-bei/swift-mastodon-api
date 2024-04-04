@@ -21,6 +21,11 @@ extension Request {
         return Request(method: .get, path: endpoint, queryItems: queryItems)
     }
 
+    public static func get(_ endpoint: String, parameters: [(String, String?)]) -> Request {
+        let queryItems = parameters.map { URLQueryItem(name: $0.0, value: $0.1) }
+        return Request(method: .get, path: endpoint, queryItems: queryItems)
+    }
+
     public static func post(_ endpoint: String) -> Request {
         return Request(method: .post, path: endpoint)
     }
