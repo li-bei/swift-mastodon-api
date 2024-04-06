@@ -15,17 +15,31 @@ public struct MastodonAPI: Sendable {
         self.session = session
     }
 
+    public func send(_ request: Request) async throws {
+        try await data(for: request)
+    }
+
     public func response<Response: Decodable>(
         _ responseType: Response.Type,
         for request: Request
     ) async throws -> Response {
-        return try await paginatedResponse(responseType, for: request).0
+        let (data, _) = try await data(for: request)
+        let response = try makeJSONDecoder().decode(Response.self, from: data)
+        return response
     }
 
     public func paginatedResponse<Response: Decodable>(
         _ responseType: Response.Type,
         for request: Request
-    ) async throws -> (Response, String? ) {
+    ) async throws -> (Response, String?) {
+        let (data, httpResponse) = try await data(for: request)
+        let response = try makeJSONDecoder().decode(Response.self, from: data)
+        let paginationID = paginationID(from: httpResponse)
+        return (response, paginationID)
+    }
+
+    @discardableResult
+    private func data(for request: Request) async throws -> (Data, HTTPResponse) {
         var urlComponents = URLComponents()
         urlComponents.path = request.path
         if let queryItems = request.queryItems?.filter({ $0.value != nil }), queryItems.isEmpty == false {
@@ -34,23 +48,18 @@ public struct MastodonAPI: Sendable {
         guard let url = urlComponents.url(relativeTo: serverURL) else {
             throw MastodonAPIError(request: request)
         }
-
         var httpRequest = HTTPRequest(method: request.method, url: url, headerFields: request.headerFields)
         if let accessToken {
             httpRequest.headerFields[.authorization] = "Bearer \(accessToken)"
         }
-
         let (data, httpResponse) = if let body = request.body {
             try await session.upload(for: httpRequest, from: body)
         } else {
             try await session.data(for: httpRequest)
         }
-
         switch httpResponse.status.kind {
         case .successful:
-            let response = try makeJSONDecoder().decode(Response.self, from: data)
-            let paginationID = paginationID(from: httpResponse)
-            return (response, paginationID)
+            return (data, httpResponse)
         default:
             if let error = try? JSONDecoder().decode(Entities.Error.self, from: data) {
                 throw error
@@ -79,7 +88,6 @@ public struct MastodonAPI: Sendable {
                     debugDescription: "Expected date string to be ISO8601-formatted."
                 )
             }
-
         }
         return jsonDecoder
     }
