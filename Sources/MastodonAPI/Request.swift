@@ -12,6 +12,10 @@ public struct Request: Sendable {
 // MARK: -
 
 extension Request {
+    public static func delete(_ endpoint: String) -> Request {
+        return Request(method: .delete, path: endpoint)
+    }
+
     public static func get(_ endpoint: String) -> Request {
         return Request(method: .get, path: endpoint)
     }
