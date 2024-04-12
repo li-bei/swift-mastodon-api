@@ -11,6 +11,7 @@ extension Entities {
         public let isBookmarked: Bool
         public let isFavorited: Bool
         public let isReblogged: Bool
+        public let mediaAttachments: [MediaAttachment]
         public let reblog: Status?
         public let url: URL?
         public let visibility: String
@@ -25,6 +26,7 @@ extension Entities {
             case isBookmarked = "bookmarked"
             case isFavorited = "favourited"
             case isReblogged = "reblogged"
+            case mediaAttachments = "media_attachments"
             case reblog
             case url
             case visibility
