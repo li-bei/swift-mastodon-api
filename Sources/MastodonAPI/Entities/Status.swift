@@ -17,6 +17,7 @@ extension Entities {
         public let mentions: [Mention]
         public let reblog: Status?
         public let spoilerText: String?
+        public let tags: [Tag]
         public let url: URL?
         public let visibility: String
 
@@ -36,6 +37,7 @@ extension Entities {
             case mentions
             case reblog
             case spoilerText = "spoiler_text"
+            case tags
             case url
             case visibility
         }
