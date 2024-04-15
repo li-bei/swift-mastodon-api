@@ -11,6 +11,8 @@ extension Entities {
         public let followingCount: Int
         public let headerURL: URL
         public let id: String
+        public let isBot: Bool
+        public let isGroup: Bool
         public let isLocked: Bool
         public let note: String
         public let staticAvatarURL: URL
@@ -29,6 +31,8 @@ extension Entities {
             case followingCount = "following_count"
             case headerURL = "header"
             case id
+            case isBot = "bot"
+            case isGroup = "group"
             case isLocked = "locked"
             case note
             case staticAvatarURL = "avatar_static"
