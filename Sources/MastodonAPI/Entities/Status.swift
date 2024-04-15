@@ -6,6 +6,7 @@ extension Entities {
         public let content: String
         public let creationDate: Date
         public let emojis: [CustomEmoji]
+        public let favoriteCount: Int
         public let id: String
         public let inReplyToAccountID: String?
         public let inReplyToID: String?
@@ -16,6 +17,8 @@ extension Entities {
         public let mediaAttachments: [MediaAttachment]
         public let mentions: [Mention]
         public let reblog: Status?
+        public let reblogCount: Int
+        public let replyCount: Int
         public let spoilerText: String?
         public let tags: [Tag]
         public let url: URL?
@@ -26,6 +29,7 @@ extension Entities {
             case content
             case creationDate = "created_at"
             case emojis
+            case favoriteCount = "favourites_count"
             case id
             case inReplyToAccountID = "in_reply_to_account_id"
             case inReplyToID = "in_reply_to_id"
@@ -36,6 +40,8 @@ extension Entities {
             case mediaAttachments = "media_attachments"
             case mentions
             case reblog
+            case reblogCount = "reblogs_count"
+            case replyCount = "replies_count"
             case spoilerText = "spoiler_text"
             case tags
             case url
