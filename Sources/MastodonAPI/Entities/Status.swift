@@ -5,6 +5,7 @@ extension Entities {
         public let account: Account
         public let content: String
         public let creationDate: Date
+        public let emojis: [CustomEmoji]
         public let id: String
         public let inReplyToAccountID: String?
         public let inReplyToID: String?
@@ -23,6 +24,7 @@ extension Entities {
             case account
             case content
             case creationDate = "created_at"
+            case emojis
             case id
             case inReplyToAccountID = "in_reply_to_account_id"
             case inReplyToID = "in_reply_to_id"
